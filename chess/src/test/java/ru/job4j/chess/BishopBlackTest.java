@@ -4,7 +4,10 @@ import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import ru.job4j.chess.firuges.Cell;
 import ru.job4j.chess.firuges.black.BishopBlack;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BishopBlackTest {
     @Test
@@ -32,14 +35,11 @@ public class BishopBlackTest {
    }
 
     @Test
-    public void whenWayWrong() {
+    public void whenWayWrong() throws ImpossibleMoveException {
         BishopBlack bp = new BishopBlack(Cell.E6);
-        boolean resultWay = true;
-        try {
+        ImpossibleMoveException exception = assertThrows(ImpossibleMoveException.class, () -> {
             bp.way(Cell.H4);
-        } catch (ImpossibleMoveException e) {
-            resultWay = false;
+        });
+        assertThat(exception.getMessage()).isEqualTo("Could not move by diagonal from E6 to H4");
         }
-        MatcherAssert.assertThat(resultWay, is(false));
-    }
 }
